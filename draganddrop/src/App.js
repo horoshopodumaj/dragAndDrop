@@ -23,13 +23,33 @@ function App() {
     };
     const dropHandler = (e, card) => {
         e.preventDefault();
-        console.log(card, "drop");
+        setCardsList(
+            cardList.map((item) => {
+                if (item.id === card.id) {
+                    return { ...item, order: currentCard.order };
+                }
+                if (item.id === currentCard.id) {
+                    return { ...item, order: card.order };
+                }
+                return item;
+            })
+        );
+        e.target.style.background = "white";
+    };
+
+    const sortCards = (a, b) => {
+        if (a.order > b.order) {
+            return 1;
+        } else {
+            return -1;
+        }
     };
 
     return (
         <div className="app">
-            {cardList.map((card) => (
+            {cardList.sort(sortCards).map((card) => (
                 <div
+                    key={card.id}
                     className="card"
                     draggable={true}
                     onDragStart={(e) => dragStartHandler(e, card)}
